@@ -1,6 +1,5 @@
 @startuml
 !pragma teoz true
-!define SHOW_SYSTEM
 actor "Controlling Agent" as Controller
 !ifdef SHOW_SERVICES
 !include services_0a.uml!SERVICE_DEFINITIONS

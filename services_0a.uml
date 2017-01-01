@@ -1,0 +1,47 @@
+@startuml(id=SERVICE_DEFINITIONS)
+!pragma teoz true
+!ifdef DEFINE_ACTORS
+actor "Controlling Agent" as Controller
+!endif
+box "System Services"
+participant "Control Service" as ControlService
+participant "Reporting Service" as ReportService
+participant "Timer Service" as TimerService
+participant "Image Service" as ImageService
+participant "Information Service" as InformationService
+participant "Dimmer Service" as DimmerService
+participant "Profile Service" as ProfileService
+endbox
+!ifdef DEFINE_ACTORS
+actor "Observing Agent" as Observer
+actor "Monitoring Agent" as Monitor
+!endif
+@enduml
+
+@startuml(id=PARTICIPANT_INITIAL_STATES)
+!ifdef DEFINE_ACTORS
+hnote over SmartLamp : Unlit
+/ hnote over Observer : Seeing Unlit
+/ hnote over Monitor : Know Nothing
+!endif
+@enduml
+
+@startuml(id=SERVICE_LIGHT_LAMP)
+Controller -> ControlService : Light Lamp
+hnote over ControlService : Lit
+ControlService -> Observer : Lamp Lit
+& ControlService -> ReportService : Lamp Lit
+hnote over Observer : Seeing Lit
+ReportService -> Monitor : Report Lamp Lit
+hnote over Monitor : Know Lit
+@enduml
+
+@startuml(id=SERVICE_EXTINGUISH_LAMP)
+Controller -> ControlService : Extinguish Lamp
+hnote over ControlService : Unlit
+ControlService -> Observer : Lamp Extinguished
+& ControlService -> ReportService : Lamp Extinguished
+hnote over Observer : Seeing Unlit
+ReportService -> Monitor : Report Lamp Extinguished
+hnote over Monitor : Know Unlit
+@enduml

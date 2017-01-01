@@ -1,0 +1,57 @@
+@startuml
+!pragma teoz true
+!define SHOW_SYSTEM
+actor "Controlling Agent" as Controller
+!ifdef SHOW_SERVICES
+!include services_0a.uml!SERVICE_DEFINITIONS
+!else
+!ifdef SHOW_SYSTEM
+!include system_scenario_0a.uml!SYSTEM_DEFINITIONS
+!else
+participant "Smart Lamp System" as SmartLampSystem
+!endif
+!endif
+actor "Observing Agent" as Observer
+actor "Monitoring Agent" as Monitor
+
+!ifdef SHOW_SERVICES
+!else
+!ifdef SHOW_SYSTEM
+!else
+hnote over SmartLampSystem : Unlit
+!endif
+!endif
+/ hnote over Observer : Seeing Unlit
+/ hnote over Monitor : Know Nothing
+
+!ifdef SHOW_SERVICES
+!include services_0a.uml!SERVICE_LIGHT_LAMP
+!else
+!ifdef SHOW_SYSTEM
+!include system_scenario_0a.uml!SYSTEM_LIGHT_LAMP
+!else
+Controller -> SmartLampSystem : Light Lamp
+hnote over SmartLampSystem : Lit
+SmartLampSystem -> Observer : Lamp Lit
+hnote over Observer : Seeing Lit
+SmartLampSystem -> Monitor : Report Lamp Lit
+hnote over Monitor : Know Lit
+!endif
+!endif
+
+!ifdef SHOW_SERVICES
+!include services_0a.uml!SERVICE_EXTINGUISH_LAMP
+!else
+!ifdef SHOW_SYSTEM
+!include system_scenario_0a.uml!SYSTEM_EXTINGUISH_LAMP
+!else
+Controller -> SmartLampSystem : Extinguish Lamp
+hnote over SmartLampSystem : Unlit
+SmartLampSystem -> Observer : Lamp Unlit
+hnote over Observer : Seeing Unlit
+SmartLampSystem -> Monitor : Report Lamp Unlit
+hnote over Monitor : Know Unlit
+!endif
+!endif
+
+@enduml

@@ -1,0 +1,53 @@
+@startuml(id=SYSTEM_DEFINITIONS)
+!pragma teoz true
+!ifdef DEFINE_ACTORS
+actor "Controlling Agent" as Controller
+!endif
+box "System Components"
+participant "Controller's App" as ControllerApp
+participant "SmartLamp" as SmartLamp
+participant "Cloud" as Cloud
+participant "Monitor's App" as MonitorApp
+endbox
+!ifdef DEFINE_ACTORS
+actor "Observing Agent" as Observer
+actor "Monitoring Agent" as Monitor
+!endif
+@enduml
+
+@startuml(id=PARTICIPANT_INITIAL_STATES)
+hnote over SmartLamp : Unlit
+!ifdef DEFINE_ACTORS
+hnote over SmartLamp : Unlit
+/ hnote over Observer : Seeing Unlit
+/ hnote over Monitor : Know Nothing
+!endif
+@enduml
+
+@startuml(id=SYSTEM_LIGHT_LAMP)
+Controller -> ControllerApp : Light Lamp
+ControllerApp -> SmartLamp : Light Lamp
+SmartLamp -> SmartLamp : Light Lamp
+hnote over SmartLamp : Lit
+SmartLamp -> ControllerApp : Report Lamp Lit
+& SmartLamp -> Observer : Lamp Lit
+hnote over Observer : Seeing Lit
+ControllerApp -> Cloud : Report Lamp Lit
+Cloud -> MonitorApp : Report Lamp Lit
+MonitorApp -> Monitor : Report Lamp Lit
+hnote over Monitor : Know Lit
+@enduml
+
+@startuml(id=SYSTEM_EXTINGUISH_LAMP)
+Controller -> ControllerApp : Extinguish Lamp
+ControllerApp -> SmartLamp : Extinguish Lamp
+SmartLamp -> SmartLamp : Extinguish Lamp
+hnote over SmartLamp : Unlit
+SmartLamp -> ControllerApp : Report Lamp Extinguished
+& SmartLamp -> Observer : Lamp Extinguished
+hnote over Observer : Seeing Unlit
+ControllerApp -> Cloud : Report Lamp Extinguished
+Cloud -> MonitorApp : Report Lamp Extinguished
+MonitorApp -> Monitor : Report Lamp Extinguished
+hnote over Monitor : Know Unlit
+@enduml
